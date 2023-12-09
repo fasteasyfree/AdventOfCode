@@ -17,7 +17,12 @@ $Values = foreach ($Line in $InputData) {
     $SequenceArray = [System.Collections.Generic.List[System.Collections.Generic.List[int64]]]@()
 
     # Add the first line to the list so we have something to work with
-    $SequenceArray.Add([int64[]]($Line -split "\ "))
+    # As we need the first number in the list instead of the last, we'll just reverse!
+    # TempArray needed because Array.Reverse doesn't work on a generic list. So we'll do that first
+    # before it's typecast when added to the list.
+    $TempArray = [int64[]]($Line -split "\ ")
+    [array]::Reverse($TempArray)
+    $SequenceArray.Add($TempArray)
 
     $Count = 0
 
