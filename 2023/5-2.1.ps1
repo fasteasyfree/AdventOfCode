@@ -1,3 +1,7 @@
+<#
+    TO-DO: Change the seed-bank elements to a hashtable for easier referencing.
+#>
+
 $InputData  = Get-Content .\5-1_input.txt
 #$InputData  = Get-Content .\5-1_input_EXAMPLE.txt
 
@@ -57,16 +61,16 @@ for($SeedRange = 0; $SeedRange -lt $SeedRanges.count; $SeedRange += 2) {
     ))
 }
 
+# Increment through the SeedBank elements. Not a foreach, because we're
+# expecting this to rise each time we split one of the elements out.
 $Count = 0
 while ($Count -lt $SeedBank.count) {
-    $SeedMapLevel   = $SeedBank[$Count][2]
-
 
     # Go through each map - start at the level where the map was 'dropped off'
-    for ($Map = $SeedMapLevel; $Map -lt $Maps.Count; $Map++) {
+    for ($Map = $SeedBank[$Count][2]; $Map -lt $Maps.Count; $Map++) {
         
         $SeedBank[$Count][2] = $Map
-        
+
         # Let's get the start and end of the seeds
         $SeedStart      = $SeedBank[$Count][0]
         $SeedEnd        = $SeedBank[$Count][1]
@@ -111,6 +115,7 @@ while ($Count -lt $SeedBank.count) {
         }
     }
 
+    # Increment so we're ready for the next one.
     $Count++
 }
 
