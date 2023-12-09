@@ -21,4 +21,3 @@ $Distance   = $InputData[1] -replace "[^\d]"
 solve -Time $Time -Distance $Distance
 
 # 23632299
-

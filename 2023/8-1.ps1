@@ -1,4 +1,4 @@
-$InputData = Get-Content .\8-1_input.txt
+$InputData = Get-Content $PSScriptRoot\8-1_input.txt
 #$InputData = Get-Content .\8-1_input_EXAMPLE.txt
 
 $Directions = $InputData[0].ToCharArray()
@@ -23,7 +23,8 @@ while ($Current -ne $End) {
     $Count++
 
     # Set the new location to whatever the left/right value of $Current is.
-    $Current = $Nodes."$Current"[$LeftRight."$($Directions[$DirectionIndex])"]
+    $Direction = $LeftRight."$($Directions[$DirectionIndex])"
+    $Current = $Nodes."$Current"[$Direction]
     
     # If the left/right directions DirectionIndex reaches the end, reset.
     if($DirectionIndex -eq ($Directions.count - 1)) { 

@@ -1,3 +1,5 @@
+# NOT WORKING - see 8-2.2
+
 function NodeLoop {
     Param(
         [int]$ThreadsIndex=0,

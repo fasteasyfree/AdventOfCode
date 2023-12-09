@@ -1,3 +1,5 @@
+# NOT WORKING - see 8-2.2
+
 $InputData = Get-Content .\8-1_input.txt
 #$InputData = Get-Content .\8-1_input_EXAMPLE.txt
 
