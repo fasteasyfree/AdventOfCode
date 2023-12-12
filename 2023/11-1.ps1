@@ -1,5 +1,58 @@
-#$InputData = Get-Content $PSScriptRoot\11-1_input.txt
-#$InputData = Get-Content $PSScriptRoot\11-1_input_EXAMPLE.txt
+function Distance {
+    Param(
+        $P1,
+        $P2
+    )
+    return [math]::Abs(($P1.x - $P2.x) + ($P1.y - $P2.y))
+}
+
+function GetAllPairs {
+    param (
+        $List
+    )
+
+    $AllPairs = [System.Collections.Generic.List[object]]@()
+    for ($i = 0; $i -lt $GalaxyLocations.Count; $i++) {
+        for ($j = $i + 1; $j -lt $GalaxyLocations.Count; $j++) {
+            $Pairs.Add(@($GalaxyLocations[$i], $GalaxyLocations[$j]))
+        }
+    }
+
+    return $AllPairs
+}
+
+
+function FindClosestPair {
+    Param(
+        $Points
+    )
+
+    $minDistance = [double]::MaxValue
+    $closestPair = $null
+
+    for ($i = 0; $i -lt $points.Count; $i++) {
+        for ($j = $i + 1; $j -lt $points.Count; $j++) {
+            $distance = Distance $points[$i] $points[$j]
+            if ($distance -lt $minDistance) {
+                $minDistance = $distance
+                $closestPair = "$($points[$i].X),$($points[$i].Y) - $($points[$j].X),$($points[$j].Y)"
+            }
+        }
+    }
+
+    return $closestPair
+}
+
+function SumDistances {
+    Param(
+        $Points
+    )
+
+    
+}
+
+$InputData = Get-Content $PSScriptRoot\11-1_input.txt
+<#
 $InputData = @(
     "...#......",
     ".......#..",
@@ -12,6 +65,7 @@ $InputData = @(
     ".......#..",
     "#...#....."
 )
+#>
 
 # Galaxy map will be a list of lists, containing chars
 # Lists makes inserting easier
@@ -23,7 +77,7 @@ $InputData.Foreach({
 })
 
 # Create a new row of dots to add
-$NewRow = @((1..10).foreach({[char]'.'}))
+$NewRow = @((1..($GalaxyMap[0].Count)).foreach({[char]'.'}))
 # Add in the horizontal entries
 for ($Row = 0; $Row -lt $GalaxyMap.count; $Row++) {
 
@@ -70,3 +124,7 @@ for ($Line = 0; $Line -lt $GalaxyMap.count; $Line++) {
         })
     })
 }
+
+# Brute-force this.
+
+#FindClosestPair -Points $GalaxyLocations
