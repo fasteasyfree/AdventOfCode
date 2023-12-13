@@ -1,15 +1,6 @@
 Param(
-    [UInt64]$ExpansionAmount=1
+    [UInt64]$ExpansionAmount=2
 )
-
-function Distance {
-    Param(
-        #Obejcts with x,y properties
-        $P1,
-        $P2
-    )
-    return ([math]::Abs($P1.x - $P2.x) + [math]::Abs($P1.y - $P2.y))
-}
 
 function GetAllPairs {
     param (
@@ -20,8 +11,12 @@ function GetAllPairs {
     for ($i = 0; $i -lt $List.Count; $i++) {
         for ($j = $i + 1; $j -lt $List.Count; $j++) {
 
-            $Distance = Distance -P1 $List[$i] -P2 $List[$J]
-            $AllPairs.Add(@($List[$i], $List[$j], $Distance))
+            $AllPairs.Add([pscustomobject]@{
+                First = $List[$i]
+                Second = $List[$j]
+                XDistance = [math]::Abs($List[$i].x - $List[$j].x)
+                YDistance = [math]::Abs($List[$i].y - $List[$j].y)
+            })
         }
     }
 
@@ -105,11 +100,11 @@ $AllPairs = GetAllPairs -List $GalaxyLocations
 
 $Distances = Foreach ($Pair in $AllPairs) {
     # Get the columns/rows which fall inbetween the coordinates
-    $NumCols = ($ExpansionCols | Where-Object {$_ -in (($Pair[0].x)..($Pair[1].x))}).Count
-    $NumRows = ($ExpansionRows | Where-Object {$_ -in (($Pair[0].y)..($Pair[1].y))}).Count
+    $NumX = ($ExpansionCols | Where-Object {$_ -in (($Pair.First.x)..($Pair.Second.x))}).Count
+    $NumY = ($ExpansionRows | Where-Object {$_ -in (($Pair.First.y)..($Pair.Second.y))}).Count
 
     # Add the numbers up, an mulitply them by the number of gaps between
-    $Pair[2] + [UInt64]($NumRows * $ExpansionAmount) + [uint64]($NumCols * $ExpansionAmount)
+    ($Pair.XDistance - $NumX) + ($NumX * $ExpansionAmount) + ($Pair.YDistance - $NumY) + ($NumY * $ExpansionAmount)
 }
 
 ($Distances | Measure-Object -Sum).Sum
